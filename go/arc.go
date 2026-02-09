@@ -274,3 +274,7 @@ func (clob *DmClob) setLocalData(pos int, str string) {
 func (d *DmClob) GormDataType() string {
 	return "CLOB"
 }
+func (d *DmClob2) GormDataType5() string {
+	return "CLOB"
+}
+
