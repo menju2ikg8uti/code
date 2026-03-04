@@ -1,5 +1,5 @@
-#docker-image.yml
 name: Data Cleaner
+
 on:
   workflow_dispatch:
     inputs:
@@ -7,26 +7,37 @@ on:
         description: 'trigger source'
         required: false
         default: 'cron-job.org'
-# gateway
+
 jobs:
   tracker2:
     runs-on: ubuntu-latest
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v4
         with:
           persist-credentials: true
+
       - name: Sync profile
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
+
           mkdir -p python
-          files=($(ls backup/python/*.py | shuf))
-          i=1
-          for file in "${files[@]}"; do
-            cp "$file" "python/$i.py"
-            i=$((i+1))
-          done
+
+          # Hapus file lama jika ada
+          if compgen -G "python/*.py" > /dev/null; then
+            rm python/*.py
+          fi
+
+          # Acak dan rename aman terhadap spasi
+          find backup/python -maxdepth 1 -type f -name "*.py" -print0 \
+            | shuf -z \
+            | awk -v RS='\0' '{print NR "|" $0}' \
+            | while IFS="|" read -r num file; do
+                cp "$file" "python/${num}.py"
+              done
+
           git add python
-          git commit -m "push code"
+          git commit -m "push code" || echo "No changes to commit"
           git push
