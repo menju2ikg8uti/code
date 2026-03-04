@@ -1,0 +1,32 @@
+#docker-image.yml
+name: Data Cleaner
+on:
+  workflow_dispatch:
+    inputs:
+      source:
+        description: 'trigger source'
+        required: false
+        default: 'cron-job.org'
+# gateway
+jobs:
+  tracker2:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+        with:
+          persist-credentials: true
+      - name: Sync profile
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          mkdir -p pyhon
+          files=($(ls backup/python/*.py | shuf))
+          i=1
+          for file in "${files[@]}"; do
+            cp "$file" "python/$i.py"
+            i=$((i+1))
+          done
+          git add python
+          git commit -m "push code"
+          git push
