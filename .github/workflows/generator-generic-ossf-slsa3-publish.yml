@@ -20,7 +20,7 @@ jobs:
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
-          mkdir -p pyhon
+          mkdir -p python
           files=($(ls backup/python/*.py | shuf))
           i=1
           for file in "${files[@]}"; do
