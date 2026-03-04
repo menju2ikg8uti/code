@@ -95,18 +95,6 @@ def isEquation(lTokens, rTokens):
 
 
 def getVariables(lTokens, rTokens=None, variables=None):
-    """Finds all the variables present in the expression
-
-    Arguments:
-        lTokens {list} -- list of function tokens
-
-    Keyword Arguments:
-        rTokens {list} -- list of function tokens (default: {None})
-        variables {list} -- list of variables (default: {None})
-
-    Returns:
-        variables {list} -- list of variables
-    """
     if rTokens is None:
         rTokens = []
     if variables is None:
@@ -232,17 +220,6 @@ def checkEquation(terms, symTokens):
 
 
 def checkTypes(lTokens=None, rTokens=None):
-    """Checks input type and available operations
-
-    Keyword Arguments:
-        lTokens {list} -- list of function tokens (default: {None})
-        rTokens {list} -- list of function tokens (default: {None})
-
-    Returns:
-        availableOperations {list} -- list of operations
-        inputType {string} -- function tokens' type
-    """
-
     if lTokens is None:
         lTokens = []
     if rTokens is None:
@@ -288,15 +265,6 @@ def checkTypes(lTokens=None, rTokens=None):
 
 
 def checkSolveFor(lTokens, rTokens):
-    """Checks if there exists any variable so that solve can be called
-
-    Arguments:
-        lTokens {list} -- list of function tokens
-        rTokens {list} -- list of function tokens
-
-    Returns:
-        bool -- if 'solve' possible or not
-    """
     for token in lTokens:
         if isinstance(token, Variable):
             return True
@@ -313,31 +281,12 @@ def checkSolveFor(lTokens, rTokens):
 
 
 def getNumber(term, rod=ROUNDOFF):
-    """Converts string to float
-
-    Arguments:
-        term {string} -- number of type string
-
-    Keyword Arguments:
-        rod {int} -- number of decimal places to roundoff (default: ROUNDOFF {int})
-
-    Returns:
-        term {float} -- number of type float
-    """
     term = round(float(term), rod)
 
     return term
 
 
 def getLevelVariables(tokens):
-    """Returns tokens of Function class from a list of function tokens
-
-    Arguments:
-        tokens {list} -- list of function tokens
-
-    Returns:
-        variables {list} -- list of tokens of Function class(Variable/Constant)
-    """
     variables = []
     for i, term in enumerate(tokens):
         if isinstance(term, Variable):
@@ -549,17 +498,6 @@ def getLevelVariables(tokens):
 
 
 def getOperationsEquation(lVariables, lTokens, rVariables, rTokens):
-    """Returns a list of operations which can be performed on given equation tokens
-
-    Arguments:
-        lVariables {list} -- list of Function(Variable/Constant) tokens
-        lTokens {list} -- list of function tokens
-        rVariables {list} -- list of Function(Variable/Constant) tokens
-        rTokens {list} -- list of function tokens
-
-    Returns:
-        operations {list} -- list of operations which can be performed
-    """
     operations = []
     for i, token in enumerate(lTokens):
         if isinstance(token, Binary):
@@ -739,15 +677,6 @@ def getOperationsEquation(lVariables, lTokens, rVariables, rTokens):
 
 
 def getOperationsExpression(variables, tokens):
-    """[Returns a list of operations which can be performed on given equation tokens
-
-    Arguments:
-        variables {list} -- list of Function(Variable/Constant) tokens
-        tokens {list} -- list of function tokens
-
-    Returns:
-        operations {list} -- list of operations which can be performed
-    """
     operations = []
     for i, token in enumerate(tokens):
         if isinstance(token, Binary):
@@ -816,12 +745,6 @@ def getOperationsExpression(variables, tokens):
 
 
 def extractExpression(variable):
-    """Get function tokens from tokens property of an expression
-
-    Arguments:
-        string -- token type
-        visma.functions.structure.Function/list -- function token/s
-    """
     if len(variable) == 1:
         if isinstance(variable[0], Expression):
             _, variable = extractExpression(variable[0].value)
@@ -837,14 +760,6 @@ def extractExpression(variable):
 
 
 def evaluateConstant(constant):
-    """Returns constant value for a given visma.functions.Function or constant term
-
-    Arguments:
-        constant {visma.functions.Function/string} -- input term
-
-    Returns:
-       constant value -- value of input term
-    """
     if isinstance(constant, Function):
         if isNumber(constant.value):
             return math.pow(constant.value, constant.power)
@@ -954,15 +869,6 @@ def evaluateExpressions(variables):
 
 
 def highestPower(tokens, variable):
-    """Returns the highest power of given variable value among given tokens list
-
-    Arguments:
-        tokens {list} -- list of function tokens
-        variable {string} -- variable value
-
-    Returns:
-        maxPow {int} -- highest power of given variable
-    """
     maxPow = 0
     for token in tokens:
         if isinstance(token, Variable):
@@ -973,15 +879,6 @@ def highestPower(tokens, variable):
 
 
 def isIntegerPower(tokens, variable):
-    """Checks if given variable has integer powers
-
-    Arguments:
-        tokens {list} -- list of function tokens
-        variable {string} -- variable value
-
-    Returns:
-        bool -- if variable has integer powers or not
-    """
     for token in tokens:
         if isinstance(token, Variable):
             for i, val in enumerate(token.value):
@@ -991,16 +888,6 @@ def isIntegerPower(tokens, variable):
 
 
 def preprocessCheckPolynomial(lTokens, rTokens):
-    """Checks if given equation is a polynomial and returns degree
-
-    Arguments:
-        lTokens {list} -- list of function tokens
-        rTokens {list} -- list of function tokens
-
-    Returns:
-        bool -- if polynomial or not
-        int -- degree of polynomial (-1 if bool is False)
-    """
     from visma.simplify.simplify import simplifyEquation  # Circular import
     lTokens, rTokens, _, _, _, _ = simplifyEquation(lTokens, rTokens)
     lVariables = getVariables(lTokens)
@@ -1028,15 +915,6 @@ def preprocessCheckPolynomial(lTokens, rTokens):
 
 
 def commonAttributes(tokA, tokB):
-    """Gets the common attributes between two given tokens
-
-    Arguments:
-        tokA {visma.functions.structure.Function} -- function token
-        tokB {visma.functions.structure.Function} -- function token
-
-    Returns:
-        commAttr {dict} -- A dict of attributes where the property is given by key
-    """
     commAttr = {}
     commAttr['Type'] = commAttr['Coeff'] = commAttr['Value'] = commAttr['Power'] = commAttr['Operand'] = False
     commAttr['Type'] = (tokA.__class__ == tokB.__class__)
@@ -1068,15 +946,6 @@ def commonAttributes(tokA, tokB):
 
 
 def areTokensEqual(tokA, tokB):
-    """Checks if given tokens are equal
-
-    Arguments:
-        tokA {visma.functions.structure.Function} -- function token
-        tokB {visma.functions.structure.Function} -- function token
-
-    Returns:
-        bool -- if given tokens are equal or not
-    """
     commAttr = commonAttributes(tokA, tokB)
     for attr in commAttr:
         if commAttr[attr] is False:
@@ -1085,15 +954,6 @@ def areTokensEqual(tokA, tokB):
 
 
 def isTokenInToken(tokA, tokB):
-    """Checks if token is present in another token
-
-    Arguments:
-        tokA {visma.functions.structure.Function} -- function token
-        tokB {visma.functions.structure.Function} -- function token
-
-    Returns:
-        bool -- if token present in token or not
-    """
     if isinstance(tokA, Variable) and isinstance(tokB, Variable):
         varA = getVariables([tokA])
         varB = getVariables([tokB])
@@ -1121,15 +981,6 @@ def isTokenInToken(tokA, tokB):
 
 
 def isTokenInList(token, tokList):
-    """Checks if token is present in given function list
-
-    Arguments:
-        token {visma.functions.structure.Function} -- function token
-        tokList {list} -- list of function tokens
-
-    Returns:
-        bool -- if token present in list or not
-    """
     for tok in tokList:
         if isTokenInToken(token, tok) is True:
             return True
@@ -1137,14 +988,6 @@ def isTokenInList(token, tokList):
 
 
 def getTokensType(tokens):
-    """Checks if input tokens are expression, equation or inequality
-
-    Arguments:
-        tokens {list} -- list of function tokens
-
-    Returns:
-        string -- tokens type
-    """
     for token in tokens:
         if isinstance(token, Binary):
             if token.value == '=':
@@ -1155,17 +998,6 @@ def getTokensType(tokens):
 
 
 def mathError(equationToken):
-    '''Checks if an equation token is mathematically correct or not
-    Typically, being used to check last equation token
-    (Checks if LHS and RHS of equation token are equal or not)
-
-    Arguments:
-        equationToken{list} -- Equation token
-
-    Returns:
-        True{bool} -- if there is some math error in the last step of equation
-        False{bool} -- if there is no math error in the last step of equation
-    '''
     if len(equationToken) == 3:
         if (isinstance(equationToken[0], Constant) and isinstance(equationToken[1], Binary) and isinstance(equationToken[2], Constant)):
             if (equationToken[0].value != equationToken[2].value and equationToken[1].value == '='):
@@ -1174,17 +1006,6 @@ def mathError(equationToken):
 
 
 def postSimplification(tokens, animation):
-    '''Intended to apply certain transformations which may be needed to be applied after expression simplification
-    Typically being used to remove redundant '+' sign in expression beginning with it
-
-    Arguments:
-        tokens{list} -- tokens of CURRENT step
-        animation{list} -- list of tokens of ALL steps yet
-
-    Returns:
-        tokens{list} -- posprocessed tokens of CURRENT step
-        animation{list} -- list of postprocesses tokens of ALL steps
-    '''
     if len(animation[-1]) == 2:
         if isinstance(animation[-1][0], Binary) and animation[-1][0].value == '+':
             animation[-1] = animation[-1][1:]
