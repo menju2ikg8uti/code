@@ -1,4 +1,4 @@
-"""
+
 Initial Author: Siddharth Kothiyal (sidkothiyal, https://github.com/sidkothiyal)
 Other Authors:
 Owner: AerospaceResearch.net
@@ -224,4 +224,4 @@ if __name__ == "__main__":
     printHelp()
     # Turn the flow of control over to GLUT
     glutMainLoop()
-"""
+
